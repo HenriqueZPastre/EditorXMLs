@@ -1,0 +1,15 @@
+{
+	"name": "begin",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"type": "commonjs",
+	"dependencies": {
+		"fs": "^0.0.1-security",
+		"typescript": "^5.0.2",
+		"xml-js": "^1.6.11"
+	},
+	"devDependencies": {
+		"@types/node": "^18.15.5"
+	}
+}
