@@ -9,6 +9,9 @@
 		"typescript": "^5.0.2",
 		"xml-js": "^1.6.11"
 	},
+	"scripts": {
+		"start": "ts-node ./start.ts"
+	},
 	"devDependencies": {
 		"@types/node": "^18.15.5"
 	}

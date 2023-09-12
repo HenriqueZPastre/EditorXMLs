@@ -2,19 +2,19 @@ import fs from 'fs'
 import { xml2json, json2xml } from 'xml-js'
 import { Det, XMLType } from './types'
 import { ModificarNota, NotaExemplo } from './objetos'
+import { randomUUID } from 'crypto'
 
 
 export const criarNota = async (dados: ModificarNota) => {
-	/* console.log("Entrada ", dados.saida)
-	console.log("************************************") */
+
 	dados.cfop === undefined ? dados.cfop = [] : null
 	dados.ncm === undefined ? dados.ncm = [] : null
 	dados.valor === undefined ? dados.valor = [] : null
 
-	const start = await fs.promises.readFile(dados.caminho, 'utf-8')
+	const xmlInicial = await fs.promises.readFile(dados.caminho, 'utf-8')
 
-	const converter = await xml2json(start, { compact: true, })
-	let xml: XMLType = JSON.parse(converter)
+	const xmlParaJson = await xml2json(xmlInicial, { compact: true, })
+	let xml: XMLType = JSON.parse(xmlParaJson)
 
 	if (dados.data) {
 		xml.nfeProc.NFe.infNFe.ide.dhEmi._text = dados.data.toISOString()
@@ -58,12 +58,6 @@ export const criarNota = async (dados: ModificarNota) => {
 
 	}
 
-	let chave: number = parseInt(xml.nfeProc.protNFe.infProt.chNFe._text)
-	chave++
-
-
-	xml.nfeProc.protNFe.infProt.chNFe._text = chave.toString()
-
 	const newXML = json2xml(JSON.stringify(xml), {
 		compact: true
 	})
@@ -77,8 +71,10 @@ export const criarNota = async (dados: ModificarNota) => {
 	const sobreescrever = await fs.promises.readFile(dados.caminho, 'utf-8')
 	const convertOriginal = xml2json(sobreescrever, { compact: true, })
 	let original: XMLType = JSON.parse(convertOriginal)
-	chave++
-	original.nfeProc.protNFe.infProt.chNFe._text = chave.toString()
+	const uuid: string = randomUUID()
+	const somenteNumeros: string = uuid.replace(/\D/g, '');
+	console.log('Nova chave', somenteNumeros)
+	original.nfeProc.protNFe.infProt.chNFe._text = somenteNumeros
 
 	const final = json2xml(JSON.stringify(original), {
 		compact: true
@@ -86,12 +82,10 @@ export const criarNota = async (dados: ModificarNota) => {
 
 	fs.writeFile(dados.caminho, final, (err) => {
 		if (err) console.log(err);
-
 	});
 
 	console.log("saida", dados.saida)
 	console.log("************************************")
 }
-
 
 
