@@ -1,5 +1,7 @@
 import { UUID, randomUUID } from "crypto"
 export type ModificarNota = {
+	cpf?: string,
+	ie?: string,
 	caminho: string,
 	saida: string,
 	ncm?: string[]

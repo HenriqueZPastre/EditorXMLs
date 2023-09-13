@@ -4,7 +4,6 @@ import { Det, XMLType } from './types'
 import { ModificarNota, NotaExemplo } from './objetos'
 import { randomUUID } from 'crypto'
 
-
 export const criarNota = async (dados: ModificarNota) => {
 
 	dados.cfop === undefined ? dados.cfop = [] : null
@@ -16,17 +15,20 @@ export const criarNota = async (dados: ModificarNota) => {
 	const xmlParaJson = await xml2json(xmlInicial, { compact: true, })
 	let xml: XMLType = JSON.parse(xmlParaJson)
 
-	if (dados.data) {
-		xml.nfeProc.NFe.infNFe.ide.dhEmi._text = dados.data.toISOString()
-	}
+	dados.data ? xml.nfeProc.NFe.infNFe.ide.dhEmi._text = dados.data.toISOString() : null
 
-	if (dados.numeroDocumento) {
-		xml.nfeProc.NFe.infNFe.ide.nNF._text = dados.numeroDocumento.toString()
-	}
+	dados.numeroDocumento ? xml.nfeProc.NFe.infNFe.ide.nNF._text = dados.numeroDocumento.toString() : null
 
-	if (dados.tipoNota != undefined) {
-		xml.nfeProc.NFe.infNFe.ide.tpNF._text = dados.tipoNota.toString()
+	console.log(dados.tipoNota)
+	if (dados.tipoNota != undefined){
+		xml.nfeProc.NFe.infNFe.ide.tpNF._text = dados.tipoNota!.toString()
 	}
+	console.log(xml.nfeProc.NFe.infNFe.ide.tpNF._text)
+
+
+	dados.cpf ? xml.nfeProc.NFe.infNFe.dest.CPF._text = dados.cpf : null
+	console.log(dados.ie)
+	dados.ie ? xml.nfeProc.NFe.infNFe.dest.IE._text = dados.ie : null
 
 	const produtos: Det = xml.nfeProc.NFe.infNFe.det
 

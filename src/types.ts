@@ -106,6 +106,7 @@ export interface Fat {
 }
 
 export interface Dest {
+	CPF:       SignatureValue;
     CNPJ:      SignatureValue;
     xNome:     SignatureValue;
     enderDest: Ender;
